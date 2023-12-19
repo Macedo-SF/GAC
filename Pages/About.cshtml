@@ -1,0 +1,52 @@
+﻿@page
+@model AboutModel
+@{
+    ViewData["Title"] = "Nosso aplicativo";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        span.certificado {
+            border-bottom: 2px solid #77cc77;
+        }
+
+        span.sem-certificado {
+            border-bottom: 2px solid #ff7777;
+        }
+    </style>
+</head>
+<body>
+    <h1>@ViewData["Title"]</h1>
+
+    <p>
+        Esse aplicativo foi desenvolvido na disciplina de .Net em conjunto com a disciplina de Sistema de Informações. Ele foi criado para atender à necessidade de um Gerenciador de Atividades Complementares para os alunos do curso de Ciência da Computação do Instituto Federal do Norte de Minas Gerais e para auxiliar o coordenador do curso no processo de registro dessas atividades.
+    </p>
+
+    <p>
+        O aplicativo oferece a funcionalidade de inserir atividades realizadas, permitindo o armazenamento de seus certificados. Visualmente, destaca atividades <span class="certificado">com certificado</span> e <span class="sem-certificado">sem certificado</span>. Além disso, é possível visualizar o total de horas já registradas.
+    </p>
+
+    <p>
+        Ainda há funcionalidades pendentes de implementação, como a exportação e importação de pacotes para compartilhar as atividades realizadas e seus certificados.
+    </p>
+</body>
+</html>

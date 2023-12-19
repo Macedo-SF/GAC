@@ -1,0 +1,67 @@
+﻿@page
+@model GAC.Pages.RegisterActivityModel
+@{
+	ViewData["Title"] = "Register Activity";
+}
+
+<h1 style="text-align: center;">@ViewData["Title"]</h1>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: center;">
+	<form method="post" enctype="multipart/form-data" onsubmit="submitForm(event)">
+		<div>
+			<label>Nome:</label>
+			<input type="text" asp-for="Activity.Name" />
+		</div>
+		<div>
+			<label>Horas:</label>
+			<input type="text" asp-for="Activity.Hours" />
+		</div>
+		<div>
+			<label>Tipo:</label>
+			<select asp-for="Activity.Category">
+				@foreach (var activityType in Model.ActivityTypes)
+				{
+					<option value="@activityType">@activityType</option>
+				}
+			</select>
+		</div>
+
+		<div style="margin-top: 20px;">
+			<label>Certificate:</label>
+			<input type="file" name="CertificateFile" />
+			<p id="selectedFileName"></p>
+		</div>
+
+
+		<div style="margin-top: 20px;">
+			<button type="submit" class="custom-button">Registrar</button>
+		</div>
+	</form>
+</div>
+
+<script>
+	function submitForm(event) {
+		event.preventDefault(); // Prevent the default form submission
+
+		// Get form data
+		const formData = new FormData(document.querySelector('form'));
+
+		// Send a POST request to the server using fetch or XMLHttpRequest
+		fetch('/RegisterActivity', {
+			method: 'POST',
+			body: formData
+		})
+			.then(response => {
+				if (response.ok) {
+					// Redirect to StudentMain on successful submission
+					window.location.href = '/StudentMain';
+				} else {
+					// Handle errors or show error messages
+					console.error('Failed to register activity');
+				}
+			})
+			.catch(error => {
+				console.error('Error occurred:', error);
+			});
+	}
+</script>

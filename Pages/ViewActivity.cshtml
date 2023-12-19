@@ -1,0 +1,86 @@
+﻿@page
+@model GAC.Pages.ViewActivityModel
+@{
+    ViewData["Title"] = "Atividade";
+    string id = Request.Query["id"].ToString();
+}
+
+<h1 style="text-align: center;">@ViewData["Title"]</h1>
+
+<style>
+    /* Apply similar styling to the file selection area */
+    .custom-button {
+        font-size: 16px;
+        padding: 8px 20px;
+        margin-left: 10px;
+        border: none;
+        cursor: pointer;
+        background-color: #b2b2b2;
+        color: #fff;
+        display: inline-block;
+    }
+
+    /* Hide the file input */
+    #fileInput {
+        display: none;
+    }
+
+    /* Style for the selected file name */
+    #selectedFileName {
+        display: none;
+        color: #333;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+</style>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: center;">
+    <form method="post" enctype="multipart/form-data">
+        <div>
+            <label>Nome:</label>
+            <!-- Ensure the Activity.Name property exists and isn't null -->
+            <input type="text" asp-for="Activity.Name" />
+        </div>
+        <div>
+            <label>Horas:</label>
+            <!-- Ensure the Activity.Hours property exists and isn't null -->
+            <input type="text" asp-for="Activity.Hours" />
+        </div>
+        <div>
+            <label>Tipo:</label>
+            <!-- Ensure the Activity.Category property exists and isn't null -->
+            <input type="text" asp-for="Activity.Category" />
+        </div>
+
+        <div style="margin-top: 20px;">
+            <label>Certificate:</label>
+            <!-- Display a button styled similarly to the StudentMain -->
+            <button type="button" class="custom-button" onclick="selectLocalFile()">Select Certificate File</button>
+            <input type="file" id="fileInput" />
+            <p id="selectedFileName"></p>
+        </div>
+
+        <!-- Other form fields -->
+
+        <div style="margin-top: 20px;">
+            <!-- Add a button styled similarly to the StudentMain -->
+            <button type="submit" class="custom-button">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function selectLocalFile() {
+        // ... previous selectLocalFile function ...
+
+        fileInput.addEventListener('change', function () {
+            // ... previous change event handling ...
+
+            // Get the selected file name
+            const selectedFile = fileInput.files[0].name;
+            const selectedFileName = document.getElementById('selectedFileName');
+            selectedFileName.style.display = 'block';
+            selectedFileName.textContent = selectedFile;
+        });
+    }
+</script>

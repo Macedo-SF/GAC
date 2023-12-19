@@ -1,0 +1,28 @@
+﻿@page
+@model GAC.Pages.pdfViewModel
+@{
+	ViewData["Title"] = "Visualizador de PDF";
+	string certificatePath = Request.Query["certificatePath"].ToString();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (!string.IsNullOrEmpty(certificatePath))
+{
+	<style>
+		.pdf-viewer {
+			width: 100vw; /* 100% of viewport width */
+			height: 100vh; /* 100% of viewport height */
+		}
+
+		iframe {
+			width: 90%;
+			height: 90%;
+			border: none;
+		}
+	</style>
+
+	<div class="pdf-viewer">
+		<iframe src="~/Documentos/@(certificatePath)" type="application/pdf"></iframe>
+	</div>
+}

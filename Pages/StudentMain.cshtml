@@ -1,0 +1,121 @@
+﻿@page
+@model GAC.Pages.StudentModel
+@{
+    ViewData["Title"] = "Registro de Atividades";
+}
+
+<style>
+    /* Style for the activity bubble */
+	.activity-bubble {
+		display: none;
+		position: absolute;
+		color: #fff;
+		padding: 10px;
+		border-radius: 5px;
+		z-index: 1;
+	}
+	/* Shared button style */
+	.custom-button {
+		font-size: 16px;
+		padding: 8px 20px;
+		margin-left: 10px;
+		border: none;
+		cursor: pointer;
+		background-color: #454545;
+		color: #fff;
+		text-decoration: none;
+	}
+
+	a.custom-button:hover {
+		color: #fff; /* or color: inherit; */
+	}
+
+	.green-button {
+		/* Your green button style */
+		background-color: #77cc77;
+		font-size: 16px;
+		padding: 8px 20px;
+		margin-left: 10px;
+		border: none;
+		cursor: pointer;
+	}
+
+	.red-button {
+		/* Your red button style */
+		background-color: #ff7777;
+		font-size: 16px;
+		padding: 8px 20px;
+		margin-left: 10px;
+		border: none;
+		cursor: pointer;
+	}
+</style>
+
+<h1 style="text-align: center;">@ViewData["Title"]</h1>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: center;">
+	<p style="font-size: 110%;">
+		Horas Válidas: @Model.CompletedHours/160
+	</p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: center;">
+	@foreach (var activityType in Model.ActivityTypes)
+	{
+		var activityTypeData = Model.ActivityTypesWithHours.FirstOrDefault(x => x.Key == activityType);
+		var typeName = activityTypeData.Key;
+		var Hours = activityTypeData.Value;
+		<div style="flex: 0 0 20%; border: 1px solid #ccc; padding: 10px; margin: 5px; text-align: center;">
+			<h3 style="font-size: 14px; font-weight: bold;">@typeName</h3>
+			<p style="font-size: 12px;">@Hours.validHours/@Hours.maxHours</p>
+			@foreach (var activity in Model.Activities.Where(a => a.Category.Name == activityType))
+			{
+				var btnColor = activity.Certificate == null ? "#ff7777" : "#77cc77";
+				var bubbleColor = activity.Certificate == null ? "#cc4444" : "#44aa44"; // Slightly darker colors for bubble
+				var linkColor = activity.Certificate == null ? "#aa0000" : "#005500"; // Darker colors for links
+				var name = activity.Name;
+				var hours = activity.Hours;
+				var certificate = activity.Certificate ?? null;
+				var id = activity.Id;
+
+                <button type="button" onclick="showBubble('@name', '@hours', '@certificate', '@bubbleColor', '@linkColor')" style="margin-top: 10px; width: 100%; border: none; font-size: 12px; background-color: @btnColor; color: #fff;">@name</button>
+
+            }
+        </div>
+    }
+</div>
+
+<div style="text-align: center; margin-top: 20px;">
+	<a href="/RegisterActivity" class="custom-button">Registrar Atividade</a>
+	<button type="submit" class="@(Model.CompletedHours >= 160 ? "green-button" : "red-button")">Gerar Pacote</button>
+</div>
+
+<div class="activity-bubble" id="activityBubble"></div>
+
+<script>
+    function showBubble(name, hours, certificate, bubbleColor, linkColor) {
+        const bubble = document.getElementById('activityBubble');
+        bubble.style.display = 'block';
+        bubble.style.top = event.clientY + 'px'; // Position bubble near the clicked button
+        bubble.style.left = event.clientX + 'px';
+        bubble.style.backgroundColor = bubbleColor; // Set bubble's background color dynamically
+        let certificateInfo = '';
+        if (certificate === 'null') {
+            certificateInfo = '<em>No certificate available</em>';
+        } else {
+            certificateInfo = `<a href="javascript:void(0);" onclick="openPdfViewer('${certificate}')" style="color: ${linkColor};">Certificate Link</a>`;
+        }
+        bubble.innerHTML = `<strong>${name}</strong><br/>Hours: ${hours}<br/>Certificate: ${certificateInfo}`;
+        setTimeout(() => {
+            bubble.style.display = 'none'; // Hide bubble after 3 seconds (you can adjust this timeout)
+        }, 3000);
+    }
+    function openPdfViewer(certificatePath) {
+        if (certificatePath === 'null') {
+            return; // If certificatePath is null, do nothing
+        }
+        console.log('Opening PDF viewer...');
+        window.location.href = `/pdfView?certificatePath=${certificatePath}`;
+    }
+
+</script>
